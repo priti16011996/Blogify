@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<%- include('./partials/head') %>
+<title>Sign Up — Blogify</title>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Left branding panel -->
+    <div class="left-panel">
+      <div class="brand">
+        <div class="brand-mark">
+          <div class="brand-dot"></div>
+          <span class="brand-name">Blogify</span>
+        </div>
+        <h4 class="left-heading">Write more.Worry less.
+<span>Blogify</span> handles everything. </h4>
+        <p class="left-sub">Your voice deserves to be heard.
+Start writing today and share your thoughts with readers who care.</p>
+      </div>
+
+      <div class="testimonial">
+        <p>"Every great writer started somewhere.
+Join a community of creators, thinkers, and storytellers."</p>
+        <div class="t-author">
+          <div class="t-avatar">PM</div>
+          <div class="t-info">
+            <span>Priti Maurya</span>
+            <small>Head of Product, Arcflow</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="right-panel">
+      <div class="form-box">
+        <h1 class="form-title">Login</h1>
+        <p class="form-subtitle">Don't have account? <a href="/user/signup">Create Account</a></p>
+
+        <form action="/login" method="POST">
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter Your Username" required />
+            <p class="hint">We'll never share your email with anyone else.</p>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter Your Password" required />
+            <i class="fa fa-eye" aria-hidden="true"></i>
+          </div>
+          <button type="submit" class="btn-submit">Login</button>
+
+        </form>
+        <p class="form-subtitle text-center mt-4"><a href="/Help">Help</a>&nbsp;&nbsp;&nbsp;<a href="/Term">Term</a>&nbsp;&nbsp;&nbsp;<a href="/Privacy">Privacy</a></p>
+      </div>
+    </div>
+
+  </div>
+  <%- include('./partials/scripts') %> 
+</body>
+</html>
