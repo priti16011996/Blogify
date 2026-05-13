@@ -1,0 +1,35 @@
+body{
+    overflow-x: hidden;
+}
+
+/* HERO */
+.hero-section{
+    padding: 80px 0;
+}
+
+.hero-img{
+    max-width: 450px;
+    width: 100%;
+}
+
+/* BLOG IMAGES */
+.blog-img{
+    height: 250px;
+    object-fit: cover;
+}
+
+/* CARD */
+.card{
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.card:hover{
+    transform: translateY(-8px);
+}
+
+/* FOOTER */
+footer{
+    margin-top: 0;
+}

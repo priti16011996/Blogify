@@ -1,12 +1,748 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <%- include('./partials/head') %>
-    <title>Home Page</title>
-</head>
 <body>
-    <%- include('./partials/nav') %>
-    <h1>Welcome to blogify</h1>
-   <%- include('./partials/scripts') %> 
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap');
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --ink: #0f0e0d;
+        --paper: #faf8f4;
+        --muted: #6b6560;
+        --accent: #c94a2b;
+        --accent-light: #f5ebe6;
+        --rule: #d4cfc8;
+        --card-bg: #fff;
+        --serif: 'Playfair Display', Georgia, serif;
+        --sans: 'DM Sans', system-ui, sans-serif;
+      }
+
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        overflow-x: hidden;
+      }
+
+      /* ─── MASTHEAD ─── */
+      .masthead {
+        border-bottom: 3px double var(--ink);
+        padding: 3rem 0 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .masthead::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 79px,
+          var(--rule) 79px,
+          var(--rule) 80px
+        );
+        opacity: 0.35;
+        pointer-events: none;
+      }
+
+      .masthead-eyebrow {
+        font-family: var(--sans);
+        font-size: 0.7rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      .masthead-logo {
+        font-family: var(--serif);
+        font-size: clamp(4rem, 10vw, 7rem);
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        animation: fadeDown 0.8s ease both;
+      }
+
+      .masthead-logo span {
+        color: var(--accent);
+        font-style: italic;
+      }
+
+      .masthead-tagline {
+        font-family: var(--serif);
+        font-style: italic;
+        font-size: 1.1rem;
+        color: var(--muted);
+        margin-top: 0.75rem;
+        animation: fadeDown 0.8s 0.15s ease both;
+      }
+
+      .masthead-rule {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        max-width: 600px;
+        margin: 1.5rem auto 0;
+        animation: fadeDown 0.8s 0.25s ease both;
+      }
+
+      .masthead-rule::before,
+      .masthead-rule::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--ink);
+      }
+
+      .masthead-rule-text {
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: var(--ink);
+      }
+
+      /* ─── HERO FEATURE ─── */
+      .hero-section {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .hero-left {
+        padding-right: 3rem;
+        border-right: 1px solid var(--rule);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        animation: fadeUp 0.9s 0.3s ease both;
+      }
+
+      .hero-tag {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        padding: 0.3rem 0.75rem;
+        margin-bottom: 1.25rem;
+        font-family: var(--sans);
+        font-weight: 500;
+      }
+
+      .hero-title {
+        font-family: var(--serif);
+        font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+        font-weight: 900;
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+        margin-bottom: 1.25rem;
+      }
+
+      .hero-title em {
+        font-style: italic;
+        color: var(--accent);
+      }
+
+      .hero-excerpt {
+        font-size: 1.05rem;
+        line-height: 1.75;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        max-width: 460px;
+      }
+
+      .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.85rem 1.75rem;
+        font-family: var(--sans);
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.2s;
+      }
+
+      .hero-cta:hover {
+        background: var(--accent);
+        transform: translateY(-2px);
+        color: #fff;
+      }
+
+      .hero-cta-arrow {
+        font-size: 1.1em;
+        transition: transform 0.2s;
+      }
+
+      .hero-cta:hover .hero-cta-arrow {
+        transform: translateX(4px);
+      }
+
+      .hero-right {
+        padding-left: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        animation: fadeUp 0.9s 0.45s ease both;
+      }
+
+      .hero-image-wrap {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-image-wrap img {
+        width: 100%;
+        height: 340px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .hero-image-wrap:hover img {
+        transform: scale(1.03);
+      }
+
+      .hero-image-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(15,14,13,0.75));
+        padding: 2rem 1.25rem 1rem;
+        color: #fff;
+      }
+
+      .hero-image-caption h3 {
+        font-family: var(--serif);
+        font-size: 1.3rem;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .hero-image-caption p {
+        font-size: 0.8rem;
+        opacity: 0.8;
+        margin-top: 0.3rem;
+      }
+
+      /* ─── TICKER ─── */
+      .ticker-wrap {
+        background: var(--ink);
+        overflow: hidden;
+        padding: 0.6rem 0;
+      }
+
+      .ticker-track {
+        display: flex;
+        gap: 3rem;
+        animation: ticker 25s linear infinite;
+        white-space: nowrap;
+      }
+
+      .ticker-item {
+        font-size: 0.72rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--paper);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .ticker-dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+      }
+
+      /* ─── LATEST BLOGS ─── */
+      .blog-section {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        border-top: 3px solid var(--ink);
+        border-bottom: 1px solid var(--rule);
+        padding: 0.75rem 0;
+        margin-bottom: 2.5rem;
+      }
+
+      .section-title {
+        font-family: var(--serif);
+        font-size: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+
+      .section-link {
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.2s;
+      }
+
+      .section-link:hover { opacity: 0.7; }
+
+      .blog-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 0;
+      }
+
+      /* Featured card */
+      .blog-card {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.25s;
+      }
+
+      .blog-card:hover { transform: translateY(-3px); }
+
+      .blog-card--featured {
+        border-right: 1px solid var(--rule);
+        padding-right: 2rem;
+      }
+
+      .blog-card--side {
+        padding: 0 1.5rem;
+        border-right: 1px solid var(--rule);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .blog-card--side:last-child { border-right: none; padding-right: 0; }
+
+      .card-img-wrap {
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+
+      .blog-card--featured .card-img-wrap img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s;
+      }
+
+      .blog-card--side .card-img-wrap img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s;
+      }
+
+      .blog-card:hover .card-img-wrap img {
+        transform: scale(1.04);
+      }
+
+      .card-category {
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        font-weight: 500;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+
+      .card-title {
+        font-family: var(--serif);
+        font-weight: 700;
+        line-height: 1.25;
+        color: var(--ink);
+        margin-bottom: 0.6rem;
+      }
+
+      .blog-card--featured .card-title {
+        font-size: 1.75rem;
+      }
+
+      .blog-card--side .card-title {
+        font-size: 1.1rem;
+      }
+
+      .card-excerpt {
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      .card-meta {
+        font-size: 0.72rem;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: auto;
+      }
+
+      .card-meta-dot { color: var(--rule); }
+
+      /* ─── NEWSLETTER ─── */
+      .newsletter-section {
+        background: var(--ink);
+        padding: 5rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .newsletter-section::before {
+        content: 'BLOGIFY';
+        position: absolute;
+        font-family: var(--serif);
+        font-size: 18vw;
+        font-weight: 900;
+        color: rgba(255,255,255,0.03);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        white-space: nowrap;
+        letter-spacing: -0.05em;
+      }
+
+      .newsletter-eyebrow {
+        font-size: 0.68rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 1.25rem;
+      }
+
+      .newsletter-headline {
+        font-family: var(--serif);
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 1.25rem;
+      }
+
+      .newsletter-headline em {
+        font-style: italic;
+        color: #f5c97a;
+      }
+
+      .newsletter-sub {
+        font-size: 1rem;
+        color: rgba(255,255,255,0.55);
+        margin-bottom: 2.5rem;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+      }
+
+      .newsletter-form {
+        display: flex;
+        max-width: 480px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .newsletter-form input {
+        flex: 1;
+        padding: 0.9rem 1.25rem;
+        font-family: var(--sans);
+        font-size: 0.95rem;
+        border: 1px solid rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.07);
+        color: #fff;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .newsletter-form input::placeholder { color: rgba(255,255,255,0.4); }
+      .newsletter-form input:focus { border-color: rgba(255,255,255,0.5); }
+
+      .newsletter-form button {
+        padding: 0.9rem 1.5rem;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        font-family: var(--sans);
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 500;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.2s, transform 0.2s;
+      }
+
+      .newsletter-form button:hover {
+        background: #e05735;
+        transform: translateY(-1px);
+      }
+
+      /* ─── FOOTER ─── */
+      .site-footer {
+        border-top: 3px double var(--ink);
+        padding: 2rem 1.5rem;
+        text-align: center;
+        background: var(--paper);
+      }
+
+      .footer-logo {
+        font-family: var(--serif);
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-logo span { color: var(--accent); font-style: italic; }
+
+      .footer-copy {
+        font-size: 0.75rem;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+      }
+
+      /* ─── ANIMATIONS ─── */
+      @keyframes fadeDown {
+        from { opacity: 0; transform: translateY(-18px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes ticker {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+      }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 900px) {
+        .hero-section {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-left {
+          padding-right: 0;
+          border-right: none;
+          border-bottom: 1px solid var(--rule);
+          padding-bottom: 2.5rem;
+          margin-bottom: 2.5rem;
+        }
+
+        .hero-right { padding-left: 0; }
+
+        .blog-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .blog-card--featured {
+          border-right: none;
+          padding-right: 0;
+          border-bottom: 1px solid var(--rule);
+          padding-bottom: 2rem;
+          margin-bottom: 2rem;
+        }
+
+        .blog-card--side {
+          padding: 0;
+          border-right: none;
+          border-bottom: 1px solid var(--rule);
+          padding-bottom: 2rem;
+          margin-bottom: 2rem;
+        }
+
+        .blog-card--side:last-child { border-bottom: none; margin-bottom: 0; }
+      }
+    </style>
+
+    <!-- ─── MASTHEAD ─── -->
+    <header class="masthead">
+      <p class="masthead-eyebrow">Est. 2024 &nbsp;·&nbsp; Ideas Worth Reading</p>
+      <h1 class="masthead-logo">Blog<span>ify</span></h1>
+      <p class="masthead-tagline">Share your ideas, thoughts and stories with the world.</p>
+      <div class="masthead-rule">
+        <span class="masthead-rule-text">Your daily dose of insight</span>
+      </div>
+    </header>
+
+    <!-- ─── TICKER ─── -->
+    <div class="ticker-wrap" aria-hidden="true">
+      <div class="ticker-track">
+        <span class="ticker-item"><span class="ticker-dot"></span> MERN Stack</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> Node.js</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> React Performance</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> Web Design</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> JavaScript</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> DevOps</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> Open Source</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> MERN Stack</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> Node.js</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> React Performance</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> Web Design</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> JavaScript</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> DevOps</span>
+        <span class="ticker-item"><span class="ticker-dot"></span> Open Source</span>
+      </div>
+    </div>
+
+    <!-- ─── HERO FEATURE ─── -->
+    <section class="hero-section">
+      <div class="hero-left">
+        <span class="hero-tag">Editor's Pick</span>
+        <h2 class="hero-title">Write, publish &amp;<br><em>inspire</em> millions<br>of readers.</h2>
+        <p class="hero-excerpt">
+          Blogify is a modern home for curious writers. Craft your stories,
+          share your expertise, and build an audience that actually listens.
+        </p>
+        <a href="/signup" class="hero-cta">
+          Start writing today
+          <span class="hero-cta-arrow">→</span>
+        </a>
+      </div>
+      <div class="hero-right">
+        <div class="hero-image-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=900&auto=format&fit=crop"
+            alt="Person writing at a desk with a laptop and coffee"
+            loading="eager"
+          >
+          <div class="hero-image-caption">
+            <h3>The Art of Writing for the Web</h3>
+            <p>Featured story &nbsp;·&nbsp; 5 min read</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── LATEST BLOGS ─── -->
+    <section class="blog-section">
+      <div class="section-header">
+        <h2 class="section-title">Latest Posts</h2>
+        <a href="/blogs" class="section-link">View all →</a>
+      </div>
+
+      <div class="blog-grid">
+
+        <!-- FEATURED -->
+        <a href="#" class="blog-card blog-card--featured">
+          <div class="card-img-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop"
+              alt="Learn MERN Stack"
+              loading="lazy"
+            >
+          </div>
+          <p class="card-category">Full-Stack</p>
+          <h3 class="card-title">The Complete Guide to Building with the MERN Stack in 2026</h3>
+          <p class="card-excerpt">
+            From setting up your environment to deploying on the cloud —
+            everything you need to ship your first full-stack app.
+          </p>
+          <div class="card-meta">
+            <span>June 3, 2026</span>
+            <span class="card-meta-dot">·</span>
+            <span>8 min read</span>
+          </div>
+        </a>
+
+        <!-- SIDE 1 -->
+        <a href="#" class="blog-card blog-card--side">
+          <div class="card-img-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop"
+              alt="Node.js Backend"
+              loading="lazy"
+            >
+          </div>
+          <p class="card-category">Backend</p>
+          <h3 class="card-title">Build Scalable APIs with Node.js &amp; Express</h3>
+          <p class="card-excerpt">
+            Production patterns for routes, middleware, and error handling.
+          </p>
+          <div class="card-meta">
+            <span>May 28, 2026</span>
+            <span class="card-meta-dot">·</span>
+            <span>6 min read</span>
+          </div>
+        </a>
+
+        <!-- SIDE 2 -->
+        <a href="#" class="blog-card blog-card--side">
+          <div class="card-img-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=600&auto=format&fit=crop"
+              alt="React Performance"
+              loading="lazy"
+            >
+          </div>
+          <p class="card-category">Frontend</p>
+          <h3 class="card-title">React Performance: Stop Re-Renders in Their Tracks</h3>
+          <p class="card-excerpt">
+            useMemo, useCallback, and code-splitting strategies that actually work.
+          </p>
+          <div class="card-meta">
+            <span>May 20, 2026</span>
+            <span class="card-meta-dot">·</span>
+            <span>7 min read</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ─── NEWSLETTER ─── -->
+    <section class="newsletter-section">
+      <p class="newsletter-eyebrow">Stay in the loop</p>
+      <h2 class="newsletter-headline">Good writing,<br>straight to your <em>inbox.</em></h2>
+      <p class="newsletter-sub">
+        Join thousands of readers who get fresh posts every week.
+        No spam, ever.
+      </p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <input type="email" placeholder="your@email.com" aria-label="Email address" />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer class="site-footer">
+      <div class="footer-logo">Blog<span>ify</span></div>
+      <p class="footer-copy">© 2026 Blogify &nbsp;·&nbsp; Built with ❤️ using Node.js &amp; EJS</p>
+    </footer>
+
+    <!-- Bootstrap JS (keep for nav compatibility) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
-</html>

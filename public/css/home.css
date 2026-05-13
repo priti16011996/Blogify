@@ -1,0 +1,21 @@
+body{
+    overflow-x: hidden;
+}
+
+/* HERO SECTION */
+.hero-section{
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+}
+
+/* BLOG CARDS */
+.card img{
+    height: 220px;
+    object-fit: cover;
+}
+
+/* FIX NAVBAR OVERLAP */
+main{
+    margin-top: 80px;
+}
