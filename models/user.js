@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { Schema, model } = require('mongoose');
+const { generateToken } = require("../services/authentication");
 
 const userSchema = new Schema({
     username: {
@@ -9,7 +10,6 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
         unique: true,
         lowercase: true,
         trim: true,
@@ -39,10 +39,31 @@ userSchema.pre('save', async function () {
 });
 
 //Compare password
-userSchema.methods.comparePassword = async function(candidatePassword) {
-    const isMatch = await bcrypt.compare(candidatePassword, this.password);
-    return isMatch;
-};
+// userSchema.methods.comparePassword = async function(candidatePassword) {
+//     const isMatch = await bcrypt.compare(candidatePassword, this.password);
+//     if (!isMatch) {
+//         throw new Error('Invalid password');
+//     }   
+// };
+userSchema.static("validateCredentialsAndGenerateToken", async function ({ username, password }) {
+
+    const user = await this.findOne({ username }).select("+password");
+
+    if (!user) {
+        throw new Error("Invalid username or password");
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+        throw new Error("Invalid username or password");
+    }
+
+    const token = generateToken(user);
+
+    return token;
+});
+
 
 const User = model('User', userSchema);
 

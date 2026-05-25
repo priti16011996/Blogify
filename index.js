@@ -4,20 +4,26 @@ const port = 3000;
 const path = require('path');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
+const blogRouter= require("./routes/blog");
 const MONGO_URL ="mongodb://127.0.0.1:27017/Blogify";
 const session = require('express-session');
 const flash = require('connect-flash');
+const cookieParser = require("cookie-parser");
+const { validateCookie } = require("./midddleware/authentication");
+
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', path.resolve("./views"));
 app.use(express.static('public'));
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended:true})); 
 app.use(session({
     secret: 'blogifysecret',
     resave: false,
     saveUninitialized: false
 }));
 app.use(flash());
+app.use(cookieParser());
+app.use(validateCookie("token"));
 
 //Call to connect to db 
 main().then(()=>{
@@ -40,7 +46,9 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.render("home");
+  res.render("Blogify",{
+    user:req.user
+  });
 });
 
 app.use('/user', userRoutes);

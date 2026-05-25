@@ -3,6 +3,7 @@
 <head>
 <%- include('./partials/head') %>
 <title>Sign Up — Blogify</title>
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="page">
@@ -39,7 +40,7 @@ Join a community of creators, thinkers, and storytellers."</p>
         <h1 class="form-title">Login</h1>
         <p class="form-subtitle">Don't have account? <a href="/user/signup">Create Account</a></p>
 
-        <form action="/login" method="POST">
+        <form action="/user/login" method="POST">
           <div class="field">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" placeholder="Enter Your Username" required />
