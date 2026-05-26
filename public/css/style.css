@@ -247,7 +247,15 @@
       transition: background 0.15s;
     }
     .oauth-btn:hover { background: #f0efeb; }
-
+    .alert-container {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      width: 100%;
+      max-width: 420px;
+    }
     /* Responsive */
     @media (max-width: 620px) {
       .left-panel { display: none; }

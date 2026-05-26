@@ -48,8 +48,12 @@ router.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
+
       req.flash("error", "All fields are required");
-      return res.redirect("/user/login");
+
+      return req.session.save(() => {
+        return res.redirect("/user/login");
+      });
     }
 
     const token = await User.validateCredentialsAndGenerateToken({
@@ -57,20 +61,33 @@ router.post("/login", async (req, res) => {
       password
     });
 
-    console.log("token login Route:", token);
-
     req.flash("success", "Login successful");
 
-    return res
-      .cookie("token", token)
-      .redirect("/");
+    req.session.save(() => {
+
+      return res
+        .cookie("token", token)
+        .redirect("/");
+    });
 
   } catch (error) {
+    console.log(error);
+    req.flash("error", error.message || "Login failed");
 
-    req.flash("error", error.message);
-
-    return res.redirect("/user/login");
+    req.session.save(() => {
+      return res.redirect("/user/login");
+    });
   }
+});
+router.get("/profile", (req, res) => {
+  res.render("profile", {
+    user: req.user
+  });
+});
+router.get("/logout", (req, res) => {
+  res.clearCookie("token");
+  req.flash("success", "Logged out successfully");
+  res.redirect("/");
 });
 
 module.exports = router;

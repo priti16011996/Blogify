@@ -20,29 +20,46 @@
         </li>
         <% if (locals.user) { %> 
             <li class="nav-item">
-              <a class="nav-link" href="#">Add Blocks</a>
+              <a class="nav-link" href="/blog/create">Add Blocks</a>
             </li>
 
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 @<%= locals.user.username %>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/user/profile">Profile</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-              </ul>
-            </li>
-        <% } else {%>
-          <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
-                Create Account
               </a>
+
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/user/login">login</a></li>
-                <li><a class="dropdown-item" href="/user/signup">SignUp</a></li>
+                <li>
+                  <a class="dropdown-item" href="/user/profile">Profile</a>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="/user/logout">Logout</a>
+                </li>
               </ul>
             </li>
+        <% } else if (!locals.user){%>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Already Have Account?
+            </a>
+            <ul class="dropdown-menu">
+              <li class="nav-item">
+                <a class="nav-link" href="/user/login">login</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Create Account
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/user/signup">Signup</a></li>
+            </ul>
+          </li>
         <% }%>
 
       </ul>
@@ -59,14 +76,4 @@
     </div>
   </div>
 </nav>
-<% if (locals.error && locals.error.length > 0) { %>
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <strong><%=  locals.error %> </strong> 
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-<% }if (locals.success && locals.success.length > 0) { %>
-  <div class="alert alert-success alert-dismissible fade show text-center w-60" role="alert">
-    <strong><%=  locals.success %> </strong> 
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  <% } %>
+ <%- include('./alerts') %>

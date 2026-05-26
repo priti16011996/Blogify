@@ -4,12 +4,14 @@ const port = 3000;
 const path = require('path');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
+const blogRoutes = require('./routes/blog');
 const blogRouter= require("./routes/blog");
 const MONGO_URL ="mongodb://127.0.0.1:27017/Blogify";
 const session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require("cookie-parser");
 const { validateCookie } = require("./midddleware/authentication");
+
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -39,10 +41,10 @@ async function main() {
 
 app.use((req, res, next) => {
 
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
 
-    next();
+  next();
 });
 
 app.get('/', (req, res) => {
@@ -52,6 +54,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/user', userRoutes);
+app.use('/blog', blogRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
