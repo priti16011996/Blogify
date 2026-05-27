@@ -11,7 +11,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const cookieParser = require("cookie-parser");
 const { validateCookie } = require("./midddleware/authentication");
-
+const Blog = require('./models/blog');
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -47,9 +47,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.render("Blogify",{
-    user:req.user
+app.get('/', async(req, res) => {
+  const blogs = await Blog.find({}).populate("createdBy", "username");
+  res.render('Blogify', {
+    user: req.user,
+    blogs
   });
 });
 

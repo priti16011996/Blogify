@@ -173,7 +173,7 @@
               name="coveredImageUrl"
               class="form-control"
               placeholder="Paste image URL..."
-              id="imageInput"
+              id="coveredImageUrl"
             >
 
             <div class="preview-box">
@@ -227,12 +227,12 @@
 
   <script>
 
-    const imageInput = document.getElementById("imageInput");
+    const coveredImageUrl = document.getElementById("coveredImageUrl");
     const previewImage = document.getElementById("previewImage");
 
-    imageInput.addEventListener("input", () => {
+    coveredImageUrl.addEventListener("input", () => {
 
-      const url = imageInput.value.trim();
+      const url = coveredImageUrl.value.trim();
 
       if(url){
         previewImage.src = url;
