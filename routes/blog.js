@@ -100,4 +100,33 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+router.post("/comment/:id", async (req, res) => {
+  if (!req.user) {
+    req.flash("error", "You must be logged in to comment");
+    return res.redirect("/user/login");
+  }
+  let { comment } = req.body;
+  const { id } = req.params;
+  try {
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      req.flash("error", "Blog not found");
+      return res.redirect("/");
+    }
+    blog.comments.push({
+      comment,
+      commentedBy: req.user.id,   
+    });
+    await blog.save();
+    req.flash("success", "Comment added successfully");   
+    return res.redirect(`/blog/${id}`);
+  } catch (error) {
+    console.log(error);
+    req.flash("error", "Something went wrong");
+    return res.redirect("/");
+  }
+});
+
+
+
 module.exports = router;
