@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const Blog = require("../models/blog");
-
+const Comment = require("../models/comment");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -84,14 +84,17 @@ router.get("/:id", async (req, res) => {
 
   const { id } = req.params;        
     try {
-        const blog = await Blog.findById(id).populate("createdBy", "username");
+        const blog = await Blog.findById(id).populate("createdBy");
         if (!blog) {
             req.flash("error", "Blog not found");
             return res.redirect("/");
         }
+        const comments = await Comment.find({ blogId: id }).populate("createdBy");
+        console.log(comments);
         res.render("DetailsBlog", {
             user: req.user,
-            blog
+            blog,
+            comments
         });
     } catch (error) {
         console.log(error);
@@ -100,26 +103,26 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.post("/comment/:id", async (req, res) => {
+router.post("/comment/:blogId", async (req, res) => {
   if (!req.user) {
     req.flash("error", "You must be logged in to comment");
     return res.redirect("/user/login");
   }
-  let { comment } = req.body;
-  const { id } = req.params;
+  let { content } = req.body;
+  const { blogId } = req.params;
   try {
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findById(blogId);
     if (!blog) {
       req.flash("error", "Blog not found");
       return res.redirect("/");
     }
-    blog.comments.push({
-      comment,
-      commentedBy: req.user.id,   
-    });
-    await blog.save();
+    const comment = await Comment.create({
+      content,
+      createdBy: req.user.id,
+      blogId  
+    })
     req.flash("success", "Comment added successfully");   
-    return res.redirect(`/blog/${id}`);
+    return res.redirect(`/blog/${blogId}`);
   } catch (error) {
     console.log(error);
     req.flash("error", "Something went wrong");

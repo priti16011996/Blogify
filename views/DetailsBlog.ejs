@@ -51,8 +51,32 @@
             line-height: 2;
             font-size: 18px;
             color: #333;
+            background-color: #518ac4;
+            padding: 20px;
+            border-radius: 8px;
+        }
+         .comment-form{
+            margin-top: 30px;
         }
 
+        .comment-btn{
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .comment-btn:hover{
+            background-color: #0056b3;
+        }
+                .comment-btn{
+                border-radius: 5px;
+                background-color: #007bff;
+                height: 40px;
+                width: 80px;
+                }
     </style>
 
 </head>
@@ -79,21 +103,67 @@
                 <%= blog.title %>
             </h1>
 
-            <p class="author">
-                By
-                <strong>
-                    <%= blog.createdBy?.username || "Unknown" %>
-                </strong>
+            <p class="author d-flex align-items-center gap-2">
+                <img
+                    src="<%= blog.createdBy?.profilePic || '/images/default-user.png' %>"
+                    width="40"
+                    height="40"
+                    class="rounded-circle"
+                    alt="profile-pic"
+                    style="object-fit: cover;"
+                />
+
+                <span>
+                    By
+                    <strong>
+                        <%= blog.createdBy?.username || "Unknown" %>
+                    </strong>
+                </span>
             </p>
 
             <hr>
 
-            <div class="blog-content">
+            <div class="blog-content" style="height: 500px; overflow-y: auto;">
 
                 <%= blog.content %>
 
             </div>
+            <div class="comment-form">
+                <h2 class="mb-4">Comments(<%= comments.length %>)</h2>
 
+                <form action="/blog/comment/<%= blog._id %>" method="POST">
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">
+                            Add a comment
+                        </label>
+
+                        <textarea
+                            name="content"
+                            id="comment"
+                            rows="3"
+                            class="form-control"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="comment-btn">
+                        Add Comment
+                    </button>
+                </form>
+            </div>
+            <div class="comments-section mt-5" style="height: 500px; overflow-y: auto;">
+                <% if(comments.length === 0){ %>
+                    <p>No comments yet. Be the first to comment!</p>
+                <% } else { %>
+                    <% comments.forEach(comment => { %>
+                        <div class="comment mb-3 p-3" style="background-color: #518ac4; border-radius: 8px;">
+                            <img src="<%= comment.createdBy.profilePic %>" width="40" height="40" class="rounded-circle mb-2" alt="profile-pic"/>
+                            <strong><%= comment.createdBy?.username || "anonymous" %></strong>
+                            <p><%= comment.content %></p>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
         </div>
 
     </div>

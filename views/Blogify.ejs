@@ -37,7 +37,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>All Blogs</h1>
 
-            <% if(user){ %>
+            <% if(typeof user !== 'undefined' && user){ %>
                 <a href="/blog/create" class="btn btn-primary">
                     Create Blog
                 </a>
@@ -45,7 +45,7 @@
         </div>
 
         <div class="row g-4">
-
+           <% if (typeof blogs !== 'undefined' && blogs.length) { %>
             <% blogs.forEach((blog) => { %>
 
                 <div class="col-lg-3 col-md-6 col-sm-12">
@@ -112,7 +112,7 @@
 
                 </div>
 
-            <% }) %>
+            <% })} %>
 
         </div>
 
