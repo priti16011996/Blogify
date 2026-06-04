@@ -152,18 +152,15 @@
       <div class="blog-card">
         <!-- Banner -->
         <div class="blog-banner">
-          <h1>Create New Blog</h1>
+          <h1>Edit Blog</h1>
 
-          <p>
-            Share your thoughts, ideas and stories with the world through
-            Blogify.
-          </p>
+          <p>Update your story and keep your content fresh.</p>
         </div>
 
         <!-- Form -->
         <div class="form-section">
           <form
-            action="/blog/create"
+            action="/blog/edit/<%= blog._id %>"
             method="POST"
             enctype="multipart/form-data"
           >
@@ -177,6 +174,7 @@
                 class="form-control"
                 placeholder="Enter blog title..."
                 required
+                value="<%= blog.title %>"
               />
             </div>
 
@@ -188,17 +186,26 @@
                 type="file"
                 name="coveredImageUrl"
                 class="form-control"
-                placeholder="Paste image URL..."
                 id="coveredImageUrl"
               />
 
               <div class="preview-box">
-                <img id="previewImage" />
+
+                <% if(blog.coveredImageUrl){ %>
+                    <img
+                        id="previewImage"
+                        src="<%= blog.coveredImageUrl %>"
+                        style="display:block"
+                    />
+                <% } else { %>
+                    <img id="previewImage" />
+                <% } %>
 
                 <p class="small-text mt-2 mb-0">
-                  Image preview will appear here
+                    Current cover image
                 </p>
-              </div>
+
+                </div>
             </div>
 
             <!-- Content -->
@@ -210,12 +217,14 @@
                 class="form-control"
                 placeholder="Write your blog content here..."
                 required
-              ></textarea>
+              >
+<%= blog.content %></textarea
+              >
             </div>
 
             <!-- Button -->
             <div class="d-grid">
-              <button class="submit-btn">Publish Blog</button>
+              <button class="submit-btn">Update Blog</button>
             </div>
           </form>
         </div>

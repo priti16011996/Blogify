@@ -52,7 +52,23 @@ app.use((req, res, next) => {
 });
 
 app.get("/", async (req, res) => {
-  const blogs = await Blog.find({}).populate("createdBy", "username");
+  const search = req.query.search || "";
+
+  let query = {};
+
+  if (search) {
+    query = {
+      $or: [
+        { title: { $regex: search, $options: "i" } },
+        { body: { $regex: search, $options: "i" } },
+      ],
+    };
+  }
+  const blogs = await Blog.find(query)
+    .populate("createdBy", "username")
+    .sort({ createdAt: -1 });
+  //const blogs = await Blog.find({}).populate("createdBy", "username");
+
   res.render("Blogify", {
     user: req.user,
     blogs,
