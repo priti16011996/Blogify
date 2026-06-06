@@ -1,252 +1,614 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <%- include('./partials/head') %>
+<head>
+  <%- include('./partials/head') %>
+  <title>Edit Story | Blogify</title>
 
-    <title>Create Blog | Blogify</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <style>
-      body {
-        background: #f5f7fb;
-        min-height: 100vh;
-      }
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      .create-blog-wrapper {
-        padding: 30px 0;
-      }
+    :root {
+      --ink:          #18181b;
+      --ink-mid:      #3f3f46;
+      --ink-muted:    #71717a;
+      --ink-light:    #a1a1aa;
+      --paper:        #fafaf9;
+      --paper-warm:   #f5f3ef;
+      --card:         #ffffff;
+      --accent:       #b45309;
+      --accent-h:     #92400e;
+      --accent-pale:  #fef3c7;
+      --border:       rgba(24,24,27,0.09);
+      --border-mid:   rgba(24,24,27,0.16);
+      --shadow-sm:    0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md:    0 4px 20px rgba(0,0,0,0.08);
+      --font-display: 'Lora', Georgia, serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+      --radius:       10px;
+      --radius-lg:    18px;
+      --t:            0.2s cubic-bezier(0.4,0,0.2,1);
+    }
 
-      .blog-card {
-        background: #fff;
-        border: none;
-        border-radius: 24px;
-        overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-      }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--paper-warm); }
+    ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-      .blog-banner {
-        background: linear-gradient(135deg, #1d2671, #c33764);
-        padding: 30px;
-        color: white;
-        position: relative;
-        overflow: hidden;
-      }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
 
-      .blog-banner::before {
-        content: "";
-        position: absolute;
-        width: 250px;
-        height: 250px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-        top: -80px;
-        right: -80px;
-      }
+    .editor-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      grid-template-rows: auto 1fr;
+    }
 
-      .blog-banner h1 {
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 12px;
-      }
+    /* ── Top bar ── */
+    .top-bar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
 
-      .blog-banner p {
-        color: rgba(255, 255, 255, 0.8);
-        max-width: 500px;
-        margin: 0;
-      }
+    .top-bar-left { display: flex; align-items: center; gap: 1.25rem; }
 
-      .form-section {
-        padding: 20px;
-      }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 99px;
+      border: 1px solid var(--border-mid);
+      transition: all var(--t);
+    }
+    .back-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-pale);
+      text-decoration: none;
+    }
+    .back-link svg {
+      width: 13px; height: 13px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    }
 
-      .form-label {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 8px;
-      }
+    .page-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-light);
+      letter-spacing: 0.08em;
+    }
 
-      .form-control {
-        border-radius: 14px;
-        border: 1px solid #dcdcdc;
-        box-shadow: none !important;
-      }
+    /* Edit badge */
+    .edit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #4f46e5;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+    .edit-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4f46e5;
+      animation: pulse 1.5s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
 
-      .form-control:focus {
-        border-color: #6c63ff;
-      }
+    .top-bar-right { display: flex; align-items: center; gap: 10px; }
 
-      textarea.form-control {
-        min-height: 220px;
-        resize: none;
-      }
+    .discard-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      background: transparent;
+      color: var(--ink-muted);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--border-mid);
+      border-radius: 99px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--t);
+    }
+    .discard-btn:hover {
+      color: #dc2626;
+      border-color: #dc2626;
+      background: #fee2e2;
+      text-decoration: none;
+    }
 
-      .submit-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border: none;
-        padding: 14px;
-        border-radius: 14px;
-        color: white;
-        font-weight: 600;
-        transition: 0.3s;
-      }
+    .save-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 26px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 99px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(180,83,9,0.3);
+      transition: all var(--t);
+    }
+    .save-btn:hover {
+      background: var(--accent-h);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(180,83,9,0.4);
+    }
+    .save-btn svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    }
 
-      .submit-btn:hover {
-        transform: translateY(-2px);
-        opacity: 0.95;
-      }
+    /* ── Writing area ── */
+    .writing-area {
+      padding: 3rem 3rem 3rem 3.5rem;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      animation: fadeUp 0.35s ease both;
+    }
 
-      .preview-box {
-        background: #f8f9fc;
-        border: 2px dashed #d7d7d7;
-        border-radius: 18px;
-        padding: 18px;
-        text-align: center;
-        margin-top: 10px;
-      }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-      .preview-box img {
-        width: 100%;
-        max-height: 220px;
-        object-fit: cover;
-        border-radius: 14px;
-        display: none;
-      }
+    .writing-hint {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .writing-hint::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-      .small-text {
-        font-size: 14px;
-        color: #777;
-      }
-      .back-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 20px;
-        background: linear-gradient(135deg, #1d2671, #c33764);
-        color: white;
-        text-decoration: none;
-        border-radius: 14px;
-        font-weight: 600;
-        box-shadow: 0 8px 25px rgba(29, 38, 113, 0.25);
-        transition: all 0.3s ease;
-      }
+    .title-input {
+      width: 100%;
+      border: none; outline: none;
+      background: transparent;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      resize: none; overflow: hidden;
+      caret-color: var(--accent);
+      padding: 0;
+      margin-bottom: 0.5rem;
+    }
+    .title-input::placeholder { color: #d4d4d8; }
 
-      .back-btn:hover {
-        transform: translateY(-2px);
-        color: white;
-        box-shadow: 0 12px 30px rgba(195, 55, 100, 0.3);
-      }
-    </style>
-  </head>
+    .title-underline {
+      width: 100%; height: 1px;
+      background: var(--accent);
+      margin-bottom: 2.5rem;
+    }
 
-  <body>
-    <%- include('./partials/nav') %>
+    .content-input {
+      width: 100%;
+      border: none; outline: none;
+      background: transparent;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--ink-mid);
+      line-height: 1.9;
+      resize: none;
+      min-height: 420px;
+      caret-color: var(--accent);
+      padding: 0;
+    }
+    .content-input::placeholder { color: #d4d4d8; font-style: italic; }
 
-    <div class="container create-blog-wrapper">
-      <div class="mb-3">
-        <a href="/" class="back-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M15 18l-6-6 6-6"></path>
-          </svg>
-          Back
+    .char-counter {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-light);
+      margin-top: 1rem;
+      text-align: right;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      padding: 2.5rem 2rem;
+      background: var(--paper-warm);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      animation: fadeUp 0.35s 0.08s ease both;
+    }
+
+    .sidebar-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .sidebar-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    /* Edit mode: indigo accent on image section */
+    .sidebar-section.edit-accent::before {
+      background: linear-gradient(90deg, #4f46e5, transparent);
+    }
+
+    .sidebar-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sidebar-label svg {
+      width: 12px; height: 12px;
+      stroke: var(--accent); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* Current image (edit page) */
+    .current-image-wrap {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .current-image-wrap img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+    .current-image-label {
+      position: absolute;
+      bottom: 8px; left: 8px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: white;
+      background: rgba(0,0,0,0.55);
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .upload-zone {
+      border: 1.5px dashed var(--border-mid);
+      border-radius: var(--radius);
+      padding: 1.25rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--t);
+      position: relative;
+      background: var(--paper-warm);
+    }
+    .upload-zone:hover { border-color: var(--accent); background: var(--accent-pale); }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+    .upload-icon {
+      width: 32px; height: 32px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 0.6rem;
+    }
+    .upload-icon svg {
+      width: 14px; height: 14px;
+      stroke: var(--ink-muted); fill: none;
+      stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .upload-text { font-size: 12.5px; font-weight: 500; color: var(--ink-mid); margin-bottom: 2px; }
+    .upload-sub  { font-size: 10.5px; color: var(--ink-light); font-family: var(--font-mono); }
+
+    .new-preview-wrap {
+      margin-top: 0.75rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: none;
+      position: relative;
+    }
+    .new-preview-wrap.show { display: block; }
+    .new-preview-wrap img { width: 100%; height: 140px; object-fit: cover; display: block; }
+    .new-preview-wrap .new-label {
+      position: absolute; top: 8px; left: 8px;
+      font-family: var(--font-mono); font-size: 10px;
+      color: white; background: #22c55e;
+      padding: 3px 8px; border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Change log ── */
+    .change-log {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .change-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--paper-warm);
+      border: 1px solid var(--border);
+    }
+    .change-row-label { color: var(--ink-muted); }
+    .change-status {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+    .change-status.unchanged { background: #f4f4f5; color: var(--ink-light); }
+    .change-status.changed   { background: #fef3c7; color: #b45309; }
+
+    /* ── Tips ── */
+    .tips-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .tips-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; }
+    .tip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 6px; }
+
+    @media (max-width: 900px) {
+      .editor-page { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+      .writing-area { padding: 2rem 1.5rem; border-right: none; border-bottom: 1px solid var(--border); }
+      .sidebar { padding: 1.5rem; }
+      .top-bar { padding: 1rem 1.5rem; }
+      .top-bar-right { gap: 8px; }
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
+
+  <form action="/blog/edit/<%= blog._id %>" method="POST" enctype="multipart/form-data" id="editForm">
+  <div class="editor-page">
+
+    <!-- ── Top bar ── -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <a href="/" class="back-link">
+          <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          All stories
         </a>
+        <span class="page-label">// editing</span>
+        <span class="edit-badge">Draft</span>
       </div>
-      <div class="blog-card">
-        <!-- Banner -->
-        <div class="blog-banner">
-          <h1>Edit Blog</h1>
-
-          <p>Update your story and keep your content fresh.</p>
-        </div>
-
-        <!-- Form -->
-        <div class="form-section">
-          <form
-            action="/blog/edit/<%= blog._id %>"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <!-- Title -->
-            <div class="mb-4">
-              <label class="form-label"> Blog Title </label>
-
-              <input
-                type="text"
-                name="title"
-                class="form-control"
-                placeholder="Enter blog title..."
-                required
-                value="<%= blog.title %>"
-              />
-            </div>
-
-            <!-- Image URL -->
-            <div class="mb-4">
-              <label class="form-label"> Cover Image URL </label>
-
-              <input
-                type="file"
-                name="coveredImageUrl"
-                class="form-control"
-                id="coveredImageUrl"
-              />
-
-              <div class="preview-box">
-
-                <% if(blog.coveredImageUrl){ %>
-                    <img
-                        id="previewImage"
-                        src="<%= blog.coveredImageUrl %>"
-                        style="display:block"
-                    />
-                <% } else { %>
-                    <img id="previewImage" />
-                <% } %>
-
-                <p class="small-text mt-2 mb-0">
-                    Current cover image
-                </p>
-
-                </div>
-            </div>
-
-            <!-- Content -->
-            <div class="mb-4">
-              <label class="form-label"> Blog Content </label>
-
-              <textarea
-                name="content"
-                class="form-control"
-                placeholder="Write your blog content here..."
-                required
-              >
-<%= blog.content %></textarea
-              >
-            </div>
-
-            <!-- Button -->
-            <div class="d-grid">
-              <button class="submit-btn">Update Blog</button>
-            </div>
-          </form>
-        </div>
+      <div class="top-bar-right">
+        <a href="/blog/<%= blog._id %>" class="discard-btn">Discard</a>
+        <button type="submit" class="save-btn" form="editForm">
+          <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save changes
+        </button>
       </div>
     </div>
 
-    <%- include('./partials/scripts') %>
+    <!-- ── Writing area ── -->
+    <div class="writing-area">
+      <div class="writing-hint">Editing story</div>
 
-    <script>
-      const coveredImageUrl = document.getElementById("coveredImageUrl");
-      const previewImage = document.getElementById("previewImage");
+      <textarea
+        class="title-input"
+        name="title"
+        placeholder="Your story title..."
+        rows="1"
+        required
+        id="titleInput"
+        oninput="autoResize(this); trackChanges();"
+      ><%= blog.title %></textarea>
+      <div class="title-underline"></div>
 
-      coveredImageUrl.addEventListener("change", () => {
-        const file = coveredImageUrl.files[0];
+      <textarea
+        class="content-input"
+        name="content"
+        placeholder="Write your content..."
+        required
+        id="contentInput"
+        oninput="trackChanges(); updateCounter();"
+      ><%= blog.content %></textarea>
 
-        if (file) {
-          previewImage.src = URL.createObjectURL(file);
-          previewImage.style.display = "block";
-        } else {
-          previewImage.style.display = "none";
-        }
-      });
-    </script>
-  </body>
+      <div class="char-counter" id="charCounter">0 words</div>
+    </div>
+
+    <!-- ── Sidebar ── -->
+    <div class="sidebar">
+
+      <!-- Cover image -->
+      <div class="sidebar-section edit-accent">
+        <div class="sidebar-label">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Cover image
+        </div>
+
+        <% if(blog.coveredImageUrl){ %>
+          <div class="current-image-wrap">
+            <img src="<%= blog.coveredImageUrl %>" alt="Current cover">
+            <span class="current-image-label">Current</span>
+          </div>
+        <% } %>
+
+        <div class="upload-zone">
+          <input type="file" name="coveredImageUrl" id="imageInput" accept="image/*">
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          </div>
+          <p class="upload-text"><%= blog.coveredImageUrl ? 'Replace image' : 'Upload cover' %></p>
+          <p class="upload-sub">JPG, PNG, WEBP · Max 5MB</p>
+        </div>
+
+        <div class="new-preview-wrap" id="newPreviewWrap">
+          <img id="newPreviewImg" src="" alt="New cover">
+          <span class="new-label">New</span>
+        </div>
+      </div>
+
+      <!-- Change tracker -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">
+          <svg viewBox="0 0 24 24" style="stroke:var(--ink-light)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Changes
+        </div>
+        <div class="change-log">
+          <div class="change-row">
+            <span class="change-row-label">Title</span>
+            <span class="change-status unchanged" id="status-title">Unchanged</span>
+          </div>
+          <div class="change-row">
+            <span class="change-row-label">Content</span>
+            <span class="change-status unchanged" id="status-content">Unchanged</span>
+          </div>
+          <div class="change-row">
+            <span class="change-row-label">Cover image</span>
+            <span class="change-status unchanged" id="status-image">Unchanged</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Quick tips
+        </div>
+        <ul class="tips-list">
+          <li><span class="tip-dot"></span>Re-read your intro — is it still the strongest hook?</li>
+          <li><span class="tip-dot"></span>Check that your headings (01, 02…) flow logically.</li>
+          <li><span class="tip-dot"></span>Trim anything that doesn't add value. Less is more.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+  </form>
+
+  <%- include('./partials/scripts') %>
+
+  <script>
+    // Store originals for change tracking
+    const origTitle   = document.getElementById('titleInput').value.trim();
+    const origContent = document.getElementById('contentInput').value.trim();
+
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    function updateCounter() {
+      const text  = document.getElementById('contentInput').value.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      document.getElementById('charCounter').textContent = words + ' words';
+    }
+
+    function setStatus(id, changed) {
+      const el = document.getElementById(id);
+      if (changed) {
+        el.textContent = 'Modified';
+        el.className   = 'change-status changed';
+      } else {
+        el.textContent = 'Unchanged';
+        el.className   = 'change-status unchanged';
+      }
+    }
+
+    function trackChanges() {
+      const curTitle   = document.getElementById('titleInput').value.trim();
+      const curContent = document.getElementById('contentInput').value.trim();
+      setStatus('status-title',   curTitle   !== origTitle);
+      setStatus('status-content', curContent !== origContent);
+    }
+
+    // Image preview
+    const imageInput    = document.getElementById('imageInput');
+    const newPreviewWrap = document.getElementById('newPreviewWrap');
+    const newPreviewImg  = document.getElementById('newPreviewImg');
+
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      if (file) {
+        newPreviewImg.src = URL.createObjectURL(file);
+        newPreviewWrap.classList.add('show');
+        setStatus('status-image', true);
+      } else {
+        newPreviewWrap.classList.remove('show');
+        setStatus('status-image', false);
+      }
+    });
+
+    // Init
+    autoResize(document.getElementById('titleInput'));
+    updateCounter();
+  </script>
+</body>
 </html>

@@ -60,6 +60,7 @@ Join a community of creators, thinkers, and storytellers."</p>
           <div class="field">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Min. 8 characters" required />
+            <i id="togglePassword" class="fa fa-eye" aria-hidden="true"></i>
           </div>
           <button type="submit" class="btn-submit">Create my account</button>
 
@@ -81,6 +82,7 @@ Join a community of creators, thinkers, and storytellers."</p>
     </div>
 
   </div>
-  <%- include('./partials/scripts') %> 
+  <%- include('./partials/showHidePassword') %>
+    <%-include('./partials/scripts') %>
 </body>
 </html>

@@ -3,7 +3,7 @@
   <head>
     <%- include('./partials/head') %>
     <title>Sign Up — Blogify</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
     <%- include('./partials/alerts') %>
@@ -72,7 +72,7 @@
                 placeholder="Enter Your Password"
                 required
               />
-              <i class="fa fa-eye" aria-hidden="true"></i>
+              <i id="togglePassword" class="fa fa-eye" aria-hidden="true"></i>
             </div>
             <button type="submit" class="btn-submit">Login</button>
           </form>
@@ -83,6 +83,7 @@
         </div>
       </div>
     </div>
-    <%- include('./partials/scripts') %>
+    <%- include('./partials/showHidePassword') %>
+    <%-include('./partials/scripts') %>
   </body>
 </html>

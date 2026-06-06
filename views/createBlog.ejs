@@ -2,137 +2,499 @@
 <html lang="en">
   <head>
     <%- include('./partials/head') %>
+    <title>Write a Story | Blogify</title>
 
-    <title>Create Blog | Blogify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --ink: #18181b;
+        --ink-mid: #3f3f46;
+        --ink-muted: #71717a;
+        --ink-light: #a1a1aa;
+        --paper: #fafaf9;
+        --paper-warm: #f5f3ef;
+        --card: #ffffff;
+        --accent: #b45309;
+        --accent-h: #92400e;
+        --accent-pale: #fef3c7;
+        --border: rgba(24, 24, 27, 0.09);
+        --border-mid: rgba(24, 24, 27, 0.16);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --shadow-lg: 0 16px 50px rgba(0, 0, 0, 0.1);
+        --font-display: "Lora", Georgia, serif;
+        --font-body: "Plus Jakarta Sans", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+        --radius: 10px;
+        --radius-lg: 18px;
+        --t: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* ── Scrollbar ── */
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--paper-warm);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #d6d3d1;
+        border-radius: 99px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent);
+      }
+
       body {
-        background: #f5f7fb;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--font-body);
         min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
       }
 
-      .create-blog-wrapper {
-        padding: 30px 0;
+      /* ── Page layout ── */
+      .editor-page {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        grid-template-rows: auto 1fr;
       }
 
-      .blog-card {
-        background: #fff;
+      /* ── Top bar ── */
+      .top-bar {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2.5rem;
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+        text-decoration: none;
+        padding: 7px 14px;
+        border-radius: 99px;
+        border: 1px solid var(--border-mid);
+        transition: all var(--t);
+      }
+      .back-link:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-pale);
+        text-decoration: none;
+      }
+      .back-link svg {
+        width: 13px;
+        height: 13px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .page-label {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--ink-light);
+        letter-spacing: 0.08em;
+      }
+
+      .publish-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 26px;
+        background: var(--accent);
+        color: #fff;
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
         border: none;
-        border-radius: 24px;
-        overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        border-radius: 99px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(180, 83, 9, 0.3);
+        transition: all var(--t);
+      }
+      .publish-btn:hover {
+        background: var(--accent-h);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(180, 83, 9, 0.4);
+      }
+      .publish-btn svg {
+        width: 14px;
+        height: 14px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
-      .blog-banner {
-        background: linear-gradient(135deg, #1d2671, #c33764);
-        padding: 30px;
-        color: white;
+      /* ── Main writing area (left) ── */
+      .writing-area {
+        padding: 3rem 3rem 3rem 3.5rem;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        animation: fadeUp 0.4s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .writing-hint {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-light);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .writing-hint::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* Ghost title input */
+      .title-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 3.5vw, 2.8rem);
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.2;
+        letter-spacing: -0.025em;
+        resize: none;
+        overflow: hidden;
+        caret-color: var(--accent);
+        padding: 0;
+        margin-bottom: 0.5rem;
+      }
+      .title-input::placeholder {
+        color: #d4d4d8;
+      }
+
+      .title-underline {
+        width: 100%;
+        height: 1px;
+        background: var(--border);
+        margin-bottom: 2.5rem;
+        transition: background var(--t);
+      }
+      .title-input:focus ~ .title-underline,
+      .title-input:not(:placeholder-shown) ~ .title-underline {
+        background: var(--accent);
+      }
+
+      /* Ghost content textarea */
+      .content-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: var(--font-display);
+        font-size: 18px;
+        font-weight: 400;
+        color: var(--ink-mid);
+        line-height: 1.9;
+        resize: none;
+        min-height: 420px;
+        caret-color: var(--accent);
+        padding: 0;
+      }
+      .content-input::placeholder {
+        color: #d4d4d8;
+        font-style: italic;
+      }
+
+      /* char counter */
+      .char-counter {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--ink-light);
+        margin-top: 1rem;
+        text-align: right;
+      }
+
+      /* ── Sidebar (right) ── */
+      .sidebar {
+        padding: 2.5rem 2rem;
+        background: var(--paper-warm);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        animation: fadeUp 0.4s 0.1s ease both;
+      }
+
+      .sidebar-section {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.4rem;
+        box-shadow: var(--shadow-sm);
         position: relative;
         overflow: hidden;
       }
 
-      .blog-banner::before {
+      .sidebar-section::before {
         content: "";
         position: absolute;
-        width: 250px;
-        height: 250px;
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 50%;
-        top: -80px;
-        right: -80px;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent), transparent);
       }
 
-      .blog-banner h1 {
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 12px;
+      .sidebar-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-light);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .sidebar-label svg {
+        width: 12px;
+        height: 12px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        color: var(--accent);
       }
 
-      .blog-banner p {
-        color: rgba(255, 255, 255, 0.8);
-        max-width: 500px;
-        margin: 0;
-      }
-
-      .form-section {
-        padding: 20px;
-      }
-
-      .form-label {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 8px;
-      }
-
-      .form-control {
-        border-radius: 14px;
-        border: 1px solid #dcdcdc;
-        box-shadow: none !important;
-      }
-
-      .form-control:focus {
-        border-color: #6c63ff;
-      }
-
-      textarea.form-control {
-        min-height: 220px;
-        resize: none;
-      }
-
-      .submit-btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border: none;
-        padding: 14px;
-        border-radius: 14px;
-        color: white;
-        font-weight: 600;
-        transition: 0.3s;
-      }
-
-      .submit-btn:hover {
-        transform: translateY(-2px);
-        opacity: 0.95;
-      }
-
-      .preview-box {
-        background: #f8f9fc;
-        border: 2px dashed #d7d7d7;
-        border-radius: 18px;
-        padding: 18px;
+      /* ── Image upload zone ── */
+      .upload-zone {
+        border: 1.5px dashed var(--border-mid);
+        border-radius: var(--radius);
+        padding: 1.5rem 1rem;
         text-align: center;
-        margin-top: 10px;
+        cursor: pointer;
+        transition: all var(--t);
+        position: relative;
+        background: var(--paper-warm);
+      }
+      .upload-zone:hover {
+        border-color: var(--accent);
+        background: var(--accent-pale);
+      }
+      .upload-zone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+      }
+      .upload-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--paper);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.75rem;
+      }
+      .upload-icon svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--ink-muted);
+        fill: none;
+        stroke-width: 1.75;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .upload-text {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-mid);
+        margin-bottom: 3px;
+      }
+      .upload-sub {
+        font-size: 11px;
+        color: var(--ink-light);
+        font-family: var(--font-mono);
       }
 
-      .preview-box img {
-        width: 100%;
-        max-height: 220px;
-        object-fit: cover;
-        border-radius: 14px;
+      /* Preview image */
+      .preview-wrap {
+        margin-top: 1rem;
+        border-radius: var(--radius);
+        overflow: hidden;
+        position: relative;
         display: none;
       }
-
-      .small-text {
+      .preview-wrap.has-image {
+        display: block;
+      }
+      .preview-wrap img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        display: block;
+      }
+      .preview-remove {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 26px;
+        height: 26px;
         font-size: 14px;
-        color: #777;
-      }
-      .back-btn {
-        display: inline-flex;
+        cursor: pointer;
+        display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 12px 20px;
-        background: linear-gradient(135deg, #1d2671, #c33764);
-        color: white;
-        text-decoration: none;
-        border-radius: 14px;
-        font-weight: 600;
-        box-shadow: 0 8px 25px rgba(29, 38, 113, 0.25);
-        transition: all 0.3s ease;
+        justify-content: center;
+        transition: background var(--t);
+      }
+      .preview-remove:hover {
+        background: #dc2626;
       }
 
-      .back-btn:hover {
-        transform: translateY(-2px);
-        color: white;
-        box-shadow: 0 12px 30px rgba(195, 55, 100, 0.3);
+      /* ── Tips box ── */
+      .tips-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .tips-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12.5px;
+        color: var(--ink-muted);
+        line-height: 1.5;
+      }
+      .tip-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+        margin-top: 6px;
+      }
+
+      /* ── Checklist ── */
+      .checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .check-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12.5px;
+        color: var(--ink-muted);
+      }
+      .check-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1.5px solid var(--border-mid);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--t);
+      }
+      .check-dot.done {
+        background: #22c55e;
+        border-color: #22c55e;
+      }
+      .check-dot.done::after {
+        content: "";
+        width: 5px;
+        height: 3px;
+        border-left: 1.5px solid white;
+        border-bottom: 1.5px solid white;
+        transform: rotate(-45deg) translateY(-1px);
+        display: block;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 900px) {
+        .editor-page {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto auto;
+        }
+        .writing-area {
+          padding: 2rem 1.5rem;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .sidebar {
+          padding: 1.5rem;
+        }
+        .top-bar {
+          padding: 1rem 1.5rem;
+        }
       }
     </style>
   </head>
@@ -140,103 +502,243 @@
   <body>
     <%- include('./partials/nav') %>
 
-    <div class="container create-blog-wrapper">
-      <div class="mb-3">
-        <a href="/" class="back-btn">
-          <svg viewBox="0 0 24 24">
-            <path d="M15 18l-6-6 6-6"></path>
-          </svg>
-          Back
-        </a>
-      </div>
-      <div class="blog-card">
-        <!-- Banner -->
-        <div class="blog-banner">
-          <h1>Create New Blog</h1>
-
-          <p>
-            Share your thoughts, ideas and stories with the world through
-            Blogify.
-          </p>
+    <form
+      action="/blog/create"
+      method="POST"
+      enctype="multipart/form-data"
+      id="blogForm"
+    >
+      <div class="editor-page">
+        <!-- ── Top bar ── -->
+        <div class="top-bar">
+          <div class="top-bar-left">
+            <a href="/" class="back-link">
+              <svg viewBox="0 0 24 24">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              All stories
+            </a>
+            <span class="page-label">// new story</span>
+          </div>
+          <button type="submit" class="publish-btn" form="blogForm">
+            <svg viewBox="0 0 24 24">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+            Publish
+          </button>
         </div>
 
-        <!-- Form -->
-        <div class="form-section">
-          <form
-            action="/blog/create"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <!-- Title -->
-            <div class="mb-4">
-              <label class="form-label"> Blog Title </label>
+        <!-- ── Writing area ── -->
+        <div class="writing-area">
+          <div class="writing-hint">Start writing</div>
 
-              <input
-                type="text"
-                name="title"
-                class="form-control"
-                placeholder="Enter blog title..."
-                required
-              />
+          <textarea
+            class="title-input"
+            name="title"
+            placeholder="Your story title..."
+            rows="1"
+            required
+            id="titleInput"
+            oninput="
+              autoResize(this);
+              updateChecklist();
+            "
+          ></textarea>
+          <div class="title-underline"></div>
+
+          <textarea
+            class="content-input"
+            name="content"
+            placeholder="Tell your story... Use **bold**, *italic*, `code`, or > blockquotes to format."
+            required
+            id="contentInput"
+            oninput="
+              updateChecklist();
+              updateCounter();
+            "
+          ></textarea>
+
+          <div class="char-counter" id="charCounter">0 words</div>
+        </div>
+
+        <!-- ── Sidebar ── -->
+        <div class="sidebar">
+          <!-- Cover image -->
+          <div class="sidebar-section">
+            <div class="sidebar-label">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              Cover image
             </div>
 
-            <!-- Image URL -->
-            <div class="mb-4">
-              <label class="form-label"> Cover Image URL </label>
-
+            <div class="upload-zone" id="uploadZone">
               <input
                 type="file"
                 name="coveredImageUrl"
-                class="form-control"
-                placeholder="Paste image URL..."
-                id="coveredImageUrl"
+                id="imageInput"
+                accept="image/*"
               />
+              <div class="upload-icon">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="16 16 12 12 8 16" />
+                  <line x1="12" y1="12" x2="12" y2="21" />
+                  <path
+                    d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"
+                  />
+                </svg>
+              </div>
+              <p class="upload-text">Drop image or click to browse</p>
+              <p class="upload-sub">JPG, PNG, WEBP · Max 5MB</p>
+            </div>
 
-              <div class="preview-box">
-                <img id="previewImage" />
+            <div class="preview-wrap" id="previewWrap">
+              <img id="previewImg" src="" alt="Cover preview" />
+              <button
+                type="button"
+                class="preview-remove"
+                id="removeImg"
+                title="Remove image"
+              >
+                ×
+              </button>
+            </div>
+          </div>
 
-                <p class="small-text mt-2 mb-0">
-                  Image preview will appear here
-                </p>
+          <!-- Checklist -->
+          <div class="sidebar-section">
+            <div class="sidebar-label">
+              <svg viewBox="0 0 24 24">
+                <polyline points="9 11 12 14 22 4" />
+                <path
+                  d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                />
+              </svg>
+              Story checklist
+            </div>
+            <div class="checklist">
+              <div class="check-item">
+                <div class="check-dot" id="chk-title"></div>
+                <span>Add a compelling title</span>
+              </div>
+              <div class="check-item">
+                <div class="check-dot" id="chk-content"></div>
+                <span>Write your content (min 50 words)</span>
+              </div>
+              <div class="check-item">
+                <div class="check-dot" id="chk-image"></div>
+                <span>Upload a cover image</span>
               </div>
             </div>
+          </div>
 
-            <!-- Content -->
-            <div class="mb-4">
-              <label class="form-label"> Blog Content </label>
-
-              <textarea
-                name="content"
-                class="form-control"
-                placeholder="Write your blog content here..."
-                required
-              ></textarea>
+          <!-- Writing tips -->
+          <div class="sidebar-section">
+            <div class="sidebar-label">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              Writing tips
             </div>
-
-            <!-- Button -->
-            <div class="d-grid">
-              <button class="submit-btn">Publish Blog</button>
-            </div>
-          </form>
+            <ul class="tips-list">
+              <li>
+                <span class="tip-dot"></span>Start with a hook — a bold
+                statement or question that pulls the reader in.
+              </li>
+              <li>
+                <span class="tip-dot"></span>Use short paragraphs. White space
+                is your reader's friend.
+              </li>
+              <li>
+                <span class="tip-dot"></span>End with a takeaway — what should
+                the reader do or think next?
+              </li>
+              <li>
+                <span class="tip-dot"></span>Use
+                <code
+                  style="
+                    font-size: 11px;
+                    background: #f4f4f5;
+                    border-radius: 3px;
+                  "
+                  >**bold**</code
+                >
+                for emphasis,
+                <code
+                  style="
+                    font-size: 11px;
+                    background: #f4f4f5;
+                    padding: 1px 5px;
+                    border-radius: 3px;
+                  "
+                  >> quote</code
+                >
+                for blockquotes.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <%- include('./partials/scripts') %>
 
     <script>
-      const coveredImageUrl = document.getElementById("coveredImageUrl");
-      const previewImage = document.getElementById("previewImage");
+      // Auto-resize title textarea
+      function autoResize(el) {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+      }
 
-      coveredImageUrl.addEventListener("change", () => {
-        const file = coveredImageUrl.files[0];
+      // Word counter
+      function updateCounter() {
+        const text = document.getElementById("contentInput").value.trim();
+        const words = text ? text.split(/\s+/).length : 0;
+        document.getElementById("charCounter").textContent = words + " words";
+      }
 
+      // Checklist live update
+      function updateChecklist() {
+        const title = document.getElementById("titleInput").value.trim();
+        const content = document.getElementById("contentInput").value.trim();
+        const words = content ? content.split(/\s+/).length : 0;
+
+        toggleCheck("chk-title", title.length > 3);
+        toggleCheck("chk-content", words >= 50);
+      }
+
+      function toggleCheck(id, done) {
+        const el = document.getElementById(id);
+        if (done) el.classList.add("done");
+        else el.classList.remove("done");
+      }
+
+      // Image preview
+      const imageInput = document.getElementById("imageInput");
+      const previewWrap = document.getElementById("previewWrap");
+      const previewImg = document.getElementById("previewImg");
+      const removeImg = document.getElementById("removeImg");
+
+      imageInput.addEventListener("change", () => {
+        const file = imageInput.files[0];
         if (file) {
-          previewImage.src = URL.createObjectURL(file);
-          previewImage.style.display = "block";
-        } else {
-          previewImage.style.display = "none";
+          previewImg.src = URL.createObjectURL(file);
+          previewWrap.classList.add("has-image");
+          toggleCheck("chk-image", true);
         }
+      });
+
+      removeImg.addEventListener("click", () => {
+        imageInput.value = "";
+        previewImg.src = "";
+        previewWrap.classList.remove("has-image");
+        toggleCheck("chk-image", false);
       });
     </script>
   </body>

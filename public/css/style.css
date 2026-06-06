@@ -323,9 +323,10 @@ body {
   top: 20px;
   left: 20px;
   text-decoration: none;
-  color: rgb(0, 0, 0);
-  font-weight: 600;
+  color: rgb(92, 77, 226);
+  font-weight: 400;
   z-index: 100;
+  font-family: "DM Sans", sans-serif;
 }
 /* Responsive */
 @media (max-width: 620px) {
@@ -335,4 +336,16 @@ body {
   .right-panel {
     padding: 2rem 1.25rem;
   }
+}
+.field {
+  position: relative;
+}
+
+.field i {
+  position: absolute;
+  right: 15px;
+  top: 38px;
+  cursor: pointer;
+  color: #888;
+  font-size: 14px;
 }

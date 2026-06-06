@@ -13,6 +13,7 @@ const flash = require("connect-flash");
 const cookieParser = require("cookie-parser");
 const { validateCookie } = require("./midddleware/authentication");
 const Blog = require("./models/blog");
+const { formatBlogContent } = require("./helpers/formatBlogContent");
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
@@ -47,6 +48,7 @@ async function main() {
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.formatBlogContent = formatBlogContent;
 
   next();
 });
@@ -67,7 +69,6 @@ app.get("/", async (req, res) => {
   const blogs = await Blog.find(query)
     .populate("createdBy", "username")
     .sort({ createdAt: -1 });
-  //const blogs = await Blog.find({}).populate("createdBy", "username");
 
   res.render("Blogify", {
     user: req.user,

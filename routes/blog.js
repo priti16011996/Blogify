@@ -141,7 +141,7 @@ router
       return res.redirect("/");
     }
 
-    const isOwner = blog.createdBy._id == req.user._id;
+    const isOwner = blog.createdBy._id == req.user.id;
 
     if (req.user.role !== "Admin" && !isOwner) {
       req.flash("error", "You don't have permission to edit blog");
