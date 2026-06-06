@@ -18,6 +18,9 @@ Blogify is designed to provide a clean and scalable blogging experience. Users c
 - JWT / Cookie-Based Authentication
 - Protected Routes
 - Role-Based Access Control (RBAC)
+- Search Blogs
+- Comments on the Blogs
+- Likes Blogs
 
 ### 📝 Blog Management
 - Create Blog Posts
@@ -25,6 +28,8 @@ Blogify is designed to provide a clean and scalable blogging experience. Users c
 - Delete Blogs
 - View Blog Details
 - Upload Cover Images
+- Like
+- Write your Feedbacks
 
 ### 💬 Community Features
 - Comment on Blogs
@@ -44,6 +49,7 @@ Blogify is designed to provide a clean and scalable blogging experience. Users c
 ### Frontend
 - HTML5
 - CSS3
+- Bootstrap
 - JavaScript
 - EJS
 
