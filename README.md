@@ -264,16 +264,32 @@ This project is licensed under the MIT License.
 ## Project Link : http://blogify-env.eba-maxykcaw.ap-south-1.elasticbeanstalk.com/blog/6a21975a3f4b43df2629f9b1
 -----
 ## Project Images
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6eed6680-d4f9-45bd-a6c5-6de69eae01b3" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/12025dd2-6813-4cf6-b417-c7a03853aaa0" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/bb57d74d-4129-48f3-b168-a137c6c5cded" />
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7d4f9c47-6b04-4428-b966-ce4874688e33" />
-  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7184ee69-048a-40ca-bc85-efaf67f44f72" />
-  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5196f09c-f598-4cb0-8d42-c0114978ecbe" />
-  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ca25283b-60ad-4068-904e-e2a54b8c2290" />
-  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9d5f4e80-7124-4978-b59e-3c234fdcccdb" />
-  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0d732f32-55e8-451a-adf6-57bb25cfd4a5" />
-  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e4206164-b907-4675-8fe3-24050920a18c" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e456f3ef-2723-4547-81c2-93664ed772f8" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2d59744f-d618-4618-9293-e0b1c05090b9" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0dfd76df-f72e-4498-8efe-0cdf6be4876b" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7c448df9-aa28-4486-bc2b-644176cc9d13" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b36c5009-95b5-4932-b616-31a170cb8c85" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/ec1826bf-6bdf-465f-a8ad-03ef68a63e23" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/84f8802a-5833-4cfa-9d7b-19716a52f491" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/723ab2fa-336a-4737-a595-127fd42f7dc1" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/73796ff1-f082-4110-8cc1-823c1749ec46" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6826cce3-cbec-4bf5-8238-8c9b6a8ee0ed" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/6c0b32ad-a01d-46e9-acae-354cce80aceb" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/128cc434-26fe-4e30-9fed-d8b20584008b" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0d2da6f4-81b9-418f-904d-39a14ce26a6f" />
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
