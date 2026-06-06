@@ -156,11 +156,14 @@ npm start
 | Method | Route | Description |
 |---------|---------|-------------|
 | GET | / | View All Blogs |
-| GET | /blog/add-new | Add Blog |
+| GET | /blog/create | Add Blog |
 | POST | /blog | Create Blog |
 | GET | /blog/:id | Blog Details |
 | POST | /blog/edit/:id | Update Blog |
 | POST | /blog/delete/:id | Delete Blog |
+| GET | /blog/:id/Comment | Get All Comments |
+| POST | /blog/:id/Comment | Create Comment |
+| POST | /blog/:id/Like | Add Likes |
 
 ---
 
